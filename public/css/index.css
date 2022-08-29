@@ -1,0 +1,59 @@
+body{
+margin:0;
+padding:0;
+background:rgb(255, 255, 255);
+font-family: 'Raleway',sans-serif;
+}
+.banner
+{ 
+    height: 100vh;
+    width: 100%;
+    background:url('../images/banner.jpg');
+    background-position: top;
+    background-size: cover;
+    /*background-attachment: fixed;*/
+    background-repeat: no-repeat;
+}
+.banner .navbar{
+    margin-top:1% ;
+}
+.banner .navbar-brand{
+    color: rgb(255, 255, 255);
+    font-size:1.8em;
+    font-weight: 700;
+    margin-left: 5%;
+}
+.banner .nav{
+    margin: right 3%;
+}
+.banner .nav li a{
+    color:#f3f3f3;
+    font-size: 1.2em;
+}
+.banner .info{
+    margin-top: 15%;
+    transform: translateY(-15);
+}
+.banner .info h1{
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+}
+.banner .info p{
+    font-size: 2em;
+    font-weight: 500;
+    color: rgb(184, 242, 247);
+    letter-spacing: 1px;
+}
+.banner .info a{
+    margin-left: 40%;
+    transform: translateX(-50%);
+    color: #fff;
+    background: #ff0202;
+    padding:10px 20px;
+    font-size: 2.0em;
+    font-weight:600;
+}
+
+

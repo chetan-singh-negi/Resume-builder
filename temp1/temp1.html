@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Generator</title>
+    <link rel="stylesheet" href="../static/css/temp1.css">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+        $(document).ready(function(e){ 
+            var user = {};
+            user["email"] = "rahulpandey0708rp@gmail.com";
+            console.log("user",user)
+        $.ajax({
+            type: "GET",
+            url: "/getUserCVDetails",
+              headers: {
+                'Content-Type': 'application/json',
+            },
+            data : user,
+              success: function(response){
+                $("#name").append(response.name);
+                $("#job").append(response.role);
+                $("#profileImage").attr("src", "../static/images/uploads/" + response.profileImage.split("\\")[3]);
+                $("#profile").append(response.profile);
+                $("#address").append(response.address);
+                $("#phone").append("+91-" + response.mobile_no);
+                $("#email").append(response.email);
+                var workExperience = [];
+                var education =[];
+                var certification =[];
+                var skill =[];
+                response.work_experience.forEach(function(item){
+                 var data = '<div class="row"><div class="column"><p>' + item.companyStartDate + '-' +  item.companyEndDate + '</p></div><div class="column"><p><b>' + item.companyName +'</b></p><p>' + item.companyWorkExperience + '</p></div></div>';
+                 workExperience.push(data);
+                });
+                response.education.forEach(function(item){
+                    var data = '<div class="row"><div class="column"><p>' + item.educationStartDate + '-' +  item.educationEndDate + '</p></div><div class="column"><p><b>' + item.educationCollegeName +'</b></p><p>' + item.education + '</p></div></div>';
+                    education.push(data);
+                   });
+                   response.certifications.forEach(function(item){
+                      
+                    var data = '<div class="row"><div class="column"><p>' + item.certificationStartDate + '-' +  item.certificationEndDate + '</p></div><div class="column"><p><b>' + item.certificationName +'</b></p><p>' + item.certification + '</p></div></div>';
+                    certification.push(data);
+                   });
+                   response.skills.forEach(function(item){
+                       
+                       var data = '<li>'+item +'</li>'
+                       skill.push(data)
+                   })
+               
+                $("#workExperince").append(workExperience);
+                $("#education").append(education);
+                $("#certifications").append(certification);
+                $("#skills-data").append("<ul style='list-style-type:square'>"+ skill + "</ul>")
+                  //if request if made successfully then the response represent the data
+                 console.log(response, "response");
+                 // $( "#result" ).empty().append( response );
+              },
+              error: function(error){
+                 console.log(error, "error");
+      
+              }
+            });
+
+
+
+
+        });
+
+
+
+        function generatePDF (){
+            const doc = new jsPDF();  //create jsPDF object
+  doc.fromHTML(document.getElementById("resume"), // page element which you want to print as PDF
+  10,
+  10, 
+  {
+    'width': 170  //set width
+  },
+  function(a) 
+   {
+    doc.save("HTML2PDF.pdf"); // save file name as HTML2PDF.pdf
+  });
+        }
+
+
+    </script>
+</head>
+<body>
+    <!--starting of HTML code-->
+    <div id="ignorePDF">
+     <div class="resume" id="resume">
+        <div class="leftpane">
+             <div class="resume_left">
+                 <div class="resume_name">
+                        <h1 id="name" class="name"></h1>
+                        <h4 id="job" class="job"></h4>
+                    
+                    <hr size="4" width="100%" color="sky blue">
+                        <br>
+                    </div>
+
+                    <h4 class="pro">PROFILE</h4>
+                    <hr>  
+                    <p id="profile"></p>
+                    
+                    <br>   
+                    <h4 class="work">WORK EXPERIENCE</h4>
+        
+                    <hr size="4" width="100%" color="sky blue">
+                    <div id="workExperince"></div>
+                   <br>
+
+                   <div class="edu"><h4>EDUCATION</h4>
+        
+                   <hr size="4" width="100%" color="sky blue">
+                   <div id="education"></div>
+                   
+        
+                    <br>
+                    <div class="cert">
+                        <h4>CERTIFICATIONS</h4>
+                    <hr size="4" width="100%" color="sky blue">
+                    <div id="certifications">
+                    </div>
+                    </div>
+                 </div>
+                 </div>
+        </div> 
+
+        <div class="rightpane">
+         <div class="resume_right">
+             <br>
+                 <div class="photo">
+                     <img id="profileImage" src="" height="100px" width="100px" class="center">             
+                 </div>  
+             
+             <br>
+                <div class="contact">
+                <h4>CONTACT</h4>
+                <hr size="4" width="100%" color="white">
+                <ul>
+                    
+                    <h4>Address <br><small><li><span id="address" style="color:white"></small></span></li><br></h4> 
+              
+                    <h4>Phone <br><small><li><span id="phone" style="color:white"></small></span></li><br></h4>
+           
+                    <h4>Email <br><small><li><span style="color:white" id="email"></small></span></h4></li><br></h4>
+                </ul>
+                </div>    
+
+                <div class="skills">
+                    <h4>SKILLS</h4> 
+                    <hr size="4" width="100%" color="white">
+                    <br>
+                    <div id = "skills-data">
+
+                    </div>
+                   <!-- <ul>
+                    <li><b>Languages</b>  <br><small>Lorem ipsum dolor sit.</small></li>
+                    <br>
+                    <hr size="1" width="100%" color="black">
+                   <br>
+                    <li><b>Interpersonal</b> <br><small>Lorem ipsum dolor sit amet consectetur adipisicing elit.</small></li>
+                    <br>
+                    <hr size="1" width="100%" color="black"> 
+                   <br>
+                    <li><b>Business</b> <br><small>Lorem ipsum dolor sit amet consectetur.</small></li>
+                    <br> 
+                    <hr size="1" width="100%" color="black">
+                   <br>
+                    <li><b>Computer</b> <br><small>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti ea adipisci earum eum!</small></li>
+                   </ul> -->
+                 </div>
+                <br>
+                <br>
+         </div>
+        </div>               
+    </div>  
+</body>    
+</html>

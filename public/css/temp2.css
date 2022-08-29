@@ -1,0 +1,71 @@
+body{
+    width: auto;
+    height: auto;
+}
+
+.container{
+    width: auto;
+    height: auto;
+}
+
+.resume_name{
+    text-align: center;
+}
+
+.leftpane{
+    width: 20%;
+    min-width: 300px;
+    height:auto;
+    min-height: auto;
+    float: left;
+    background-color: white;
+    padding: 10px;
+}
+
+.rightpane{
+    width: 60%;
+    min-width: 300px;
+    height: auto;
+    min-height: auto;
+    float: right;
+    margin-right: 5%;
+}
+
+img{
+    height: 180px;
+    border-radius: 100%;
+}
+
+.call img{
+    float: left;
+    width: 30px;
+    height: 20px;
+}
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+}
+
+.column{
+    float: left;
+    width: 50%;
+}
+
+ul{
+    list-style-type: none;
+    padding: 0%;
+}
+
+.int img{
+    width: 70px;
+    height: 50px;   
+}
+
+.divide{
+    column-count: 2;
+    column-rule: 4px double black;
+}
+

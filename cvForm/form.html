@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../static/css/form.css"/>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Form</title>
+    <script>
+     function addEduction(){
+       $(".education-block").append("<div class='block'><input type='date' name='educationStartDate' placeholder='starting year'/><input type='date' name='educationEndDate' placeholder='ending year'/><input type='text' name='educationCollegeName' placeholder='College Name'/><textarea id='education' name='education' placeholder='Your Education.....'  required style='height:100px'></textarea></div>");
+     }
+     function removeEducation(){
+       $(".education-block .block").last().remove();
+     }
+    
+     function addWorkExperience(){
+      $(".workExperience-block").append("<div class='block'><input type='date' name='companyStartDate' placeholder='starting year'/><input type='date' name='companyEndDate' placeholder='ending year'/><input type='text' name='companyName' placeholder='Company Name'/><textarea id='workexperience' name='companyWorkExperience' placeholder='Your Work Experience.....'  required style='height:100px'></textarea></div>");
+     }
+     function removeWorkExperience(){
+      $(".workExperience-block .block").last().remove();
+     }
+
+     function addSkill(){
+      var skill = $("#skills").val();
+      $(".skills").append("<div class='skillset' style='background-color:white; height:20px; width:30px; display:inline-block; border-radius: 5px;'>" + skill  +  "<i class='fa fa-close' onclick = 'removeSkill(this)'></i></div>");
+     }
+
+     function removeSkill(event){
+      $(event).parent(".skillset").remove();
+     }
+    
+     function addCertification(){
+      $(".certification-block").append("<div class='block'><input type='date' name='certificationStartDate' placeholder='starting year'/><input type='date' name='certificationEndDate' placeholder='ending year'/><input type='text' name='certificationName' placeholder='Certification Name'/><textarea id='certification' name='certification' placeholder='Your Certification.....'  required style='height:100px'></textarea></div>");
+     }
+     function removeCertification(){
+      $(".certification-block .block").last().remove();
+    }
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function (e) {
+           $('#previewImage').attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+
+    $("#img").change(function(){
+      readURL(this);
+  });
+
+  function getEducation( item )
+{
+  if(item.name.includes('education')){
+   return item
+  }
+}
+
+function getCertification (item){
+  if (item.name.includes('certification')){
+    return item
+  }
+}
+
+function getCompany (item){
+  if (item.name.includes('company')){
+    return item
+  }
+}
+
+function prepareData(){
+  var $inputs = $("form").serializeArray();
+    var educations =[];
+    var certifications = [];
+    var companies =[];
+    var skillsset = [];
+    var bio = {};
+    var filteredEducation = $inputs.filter(getEducation)
+    var filteredCertification = $inputs.filter(getCertification)
+    var filteredCompany = $inputs.filter(getCompany)
+
+    var skills = $(".skills").children();
+    for(var i=0; i< skills.length; i++){
+      skillsset.push(skills[i].innerText);
+    }
+
+    var values = {};
+
+    for(var i =0; i < filteredEducation.length; i +=4 ){
+      
+      const education = {}; 
+      for(var j =i; j < i+4; j++){
+        
+        education[filteredEducation[j].name] = filteredEducation[j].value
+      }
+      educations.push(education);
+
+    }
+
+    for(var i =0; i < filteredCertification.length; i +=4 ){
+      
+      const certification = {}; 
+      for(var j =i; j < i+4; j++){
+        
+        certification[filteredCertification[j].name] = filteredCertification[j].value
+      }
+
+      certifications.push(certification);
+
+    }
+
+    for(var i =0; i < filteredCompany.length; i +=4 ){
+      const company = {}; 
+      for(var j =i; j < i+4; j++){
+        company[filteredCompany[j].name] = filteredCompany[j].value
+      }
+      companies.push(company);
+    }
+
+    bio['educations'] = educations;
+    bio['certifications'] = certifications;
+    bio['companies'] = companies;
+    bio['skillsset'] = skillsset;
+
+    return bio;
+}
+
+$(document).ready(function(e){
+
+  $('.myform').submit(function(e) {
+    e.preventDefault();
+    // get all the inputs into an array.
+    
+
+$(this).ajaxSubmit({
+  url: '/createResume',
+  data: prepareData(),
+  type: "POST",
+  contentType: 'application/json',
+  success: function(response){
+    console.log('image uploaded and form submitted');     
+  }
+});
+});
+
+});
+
+    </script>
+</head>
+<body>
+    <div class="container">
+      <a href="/template1" target="_self">Template1</a>
+      <a href="/template2" target="_self">Template2</a>
+      <a href="/template3" target="_self">Template3</a>
+
+        <form  class = "myform" enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-25">
+              <label for="name"> Name</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="name" name="name" placeholder="Your name.." required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="name"> Current Role</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="role" name="role" placeholder="Your role.." required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="email">Email</label>
+            </div>
+            <div class="col-75">
+              <input type="email" id="email" name="email" placeholder="xyz@abc.com" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="phone">Mobile Number</label>
+            </div>
+            <div class="col-75">
+              <input type="number" id="phone" name="phone" placeholder="yourno...." required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="address">Permanent Address</label>
+            </div>
+            <div class="col-75">
+              <textarea id="address" name="address" placeholder="Your Address.."  required  style="height:100px"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-25">
+              <label for="profile">Profile</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="profile" name="profile" placeholder="your work profile...."  required>
+            </div>
+          </div>
+
+            <div class="row">
+              <div class="col-25">
+                <label for="education">Education</label>
+              </div>
+              <div class="col-75 education-block">
+                <input type="date" name="educationStartDate" placeholder="starting year"/>
+                <input type="date"  name="educationEndDate" placeholder="ending year"/>
+                <input type="text"  name="educationCollegeName" placeholder="College Name"/>
+                <textarea id="education" name="education" placeholder="Your Education....."  required style="height:100px"></textarea>
+              </div>
+              
+            </div>
+            <div class="row">
+              <input type="button" class="btn" onclick="addEduction()" value=" Add Education"/>
+              <input type="button" class="btn" onclick="removeEducation()" value="Remove Education"/>
+            </div>
+
+          <div class="row">
+            <div class="col-25">
+              <label for="workexperience">Work Experience</label>
+            </div>
+            <div class="col-75 workExperience-block">
+              <input type="date" name="companyStartDate" placeholder="starting year"/>
+              <input type="date"  name="companyEndDate" placeholder="ending year"/>
+              <input type="text"  name="companyName" placeholder="Company Name"/>
+              <textarea id="workexperience" name="companyWorkExperience" placeholder="Your work-experience....."  required style="height:100px"></textarea>
+            </div>
+
+          </div>
+          <div class="row">
+            <input type="button" class="btn" onclick="addWorkExperience()" value=" Add Work-Experience"/>
+            <input type="button" class="btn" onclick="removeWorkExperience()" value="Remove Work-Experience"/>
+          </div>
+
+          <div class="row">
+            <div class="col-25">
+              <label for="skills">Skills</label>
+            </div>
+            
+            <div class="col-75">
+              <input type="text" id="skills" name="skills" placeholder="your skills" required>
+              <div class="skills">
+                
+              </div>
+            </div>
+   
+          </div>
+          <div class="row">
+            <input type="button" value="Add Skill" onclick="addSkill()" class="btn" />
+          </div>
+
+          <div class="row">
+            <div class="col-25">
+              <label for="certification">Certifications</label>
+            </div>
+            <div class="col-75 certification-block">
+              <input type="date" name="certificationStartDate" placeholder="Starting Year"/>
+              <input type="date"  name="certificationEndDate" placeholder="Ending Year"/>
+              <input type="text"  name="certificationName" placeholder="Certification Name"/>
+              <textarea id="certification" name="certification" placeholder="Your Certifications....."  required style="height:100px"></textarea>
+            </div>
+            
+          </div>
+          <div class="row">
+            <input type="button" class="btn" onclick="addCertification()" value=" Add Certifications"/>
+            <input type="button" class="btn" onclick="removeCertification()" value="Remove Certifications"/>
+          </div>
+
+          <div class="row">
+            <div class="col-25">
+              <label for="img">Select image:</label>
+              <div class="col-75 ">
+              <div class="image-block">
+                <input type="file" id="img" name="profileImage" onchange=" readURL(this)"/> 
+                <img id="previewImage"  alt="Profile" height ="150px" width="150px"/>
+              </div>
+              <input type="submit" value="upload" class="btn"/>
+              
+            </div>
+          </div>
+          
+          <div class="row">
+            <input type="submit" value="Submit" id="subm">
+          </div>
+        </form>
+      </div>    
+</body>
+</html>

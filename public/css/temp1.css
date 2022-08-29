@@ -1,0 +1,74 @@
+body{
+    width: auto;
+    height: auto;
+}
+
+.container{
+    width: auto;
+    height: auto;
+}
+
+.leftpane{
+    width: 70%;
+    min-width: none;
+    height:auto;
+    min-height: auto;
+    float: left;
+    background-color: white;
+    padding: 5%;
+}
+
+.rightpane{
+    width: 20%;
+    min-width: none;
+    height: auto;
+    min-height: auto;
+    float: right;
+    color: white;
+    background-color:  rgb(65, 224, 252);
+}
+
+.contact img{
+    float: left;
+    width: 30px;
+    height: 20px;   
+}
+
+img{
+    height: 180px;
+    border-radius: 70%;
+}
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+.column{
+    float: left;
+    width: 50%;
+}
+
+ol{
+    list-style-type: circle;
+    padding:5px;
+}
+
+ul{
+    list-style-type: none;
+    padding: 0px;
+}
+
+.skills{
+    padding:10%;
+}
+
+.contact{
+    padding: 10%;
+}
+
+hr{
+    margin-right: 0%;
+}
